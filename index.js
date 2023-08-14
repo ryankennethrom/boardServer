@@ -56,7 +56,7 @@ io.on('connection', (socket)=>{
                 }
                 var base64ImageData = canvas?.toDataURL("image/png");
 
-                io.emit("canvas-data", base64ImageData );
+                socket.broadcast.emit("canvas-data", base64ImageData );
 
                 var filter = { _id: "frequentSave" };
                 var update = { image: base64ImageData };
