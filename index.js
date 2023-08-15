@@ -29,11 +29,12 @@ var base64ImageData = "";
 
 io.on('connection', async(socket)=>{
         console.log('a user connected');
-        var docs = await CanvasImage.find({id:"frequentSave"});
-        base64ImageData = docs[0].image;
         socket.on("canvas-data", ()=>{
-            socket.emit("canvas-data", base64ImageData );
-            console.log("canvas-data-emitted");
+            CanvasImage.find({id:"frequentSave"}).then((docs)=>{
+                base64ImageData = docs[0].image;
+                socket.emit("canvas-data", base64ImageData );
+                console.log("canvas-data-emitted");
+            });
         })
 
         socket.on("pen-action", (line_details_array) => {
