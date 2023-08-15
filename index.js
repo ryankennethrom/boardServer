@@ -32,23 +32,20 @@ io.on('connection', (socket)=>{
         socket.emit("canvas-data", base64ImageData );
     })
 
-    socket.on("pen-action", (line_details) => {
+    socket.on("pen-action", (line_details_array) => {
         console.log("pen-action")
-
-        //draw to canvas
-        ctx.lineWidth = line_details.lineWidth;
-        ctx.lineJoin = line_details.lineJoin;
-        ctx.lineCap = line_details.lineCap;
-        ctx.strokeStyle = line_details.strokeStyle;
-        ctx.beginPath();
-        ctx.moveTo(line_details.startX, line_details.startY);
-        ctx.lineTo(line_details.currX, line_details.currY);
-        ctx.closePath();
-        ctx.stroke();
-
-        //notify views
-        var base64ImageData = canvas?.toDataURL("image/png");
-        io.emit("canvas-data", base64ImageData );
+        for (let i = 0; i < line_details_array.length; i++) {
+            var line_details = line_details_array[i];
+            ctx.lineWidth = line_details.lineWidth;
+            ctx.lineJoin = line_details.lineJoin;
+            ctx.lineCap = line_details.lineCap;
+            ctx.strokeStyle = line_details.strokeStyle;
+            ctx.beginPath();
+            ctx.moveTo(line_details.startX, line_details.startY);
+            ctx.lineTo(line_details.currX, line_details.currY);
+            ctx.closePath();
+            ctx.stroke();
+        }
     })
 })
 
