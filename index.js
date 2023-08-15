@@ -25,7 +25,10 @@ var canvas = createCanvas(750, 750);
 var ctx = canvas.getContext("2d");
 var base64ImageData = "";
 
-io.on('connection', (socket)=>{
+CanvasImage.find({id:"frequentSave"}, (docs) => {
+    base64ImageData = docs[0].image;
+
+    io.on('connection', (socket)=>{
     console.log('a user connected');
 
     socket.on("canvas-data", ()=>{
@@ -49,6 +52,12 @@ io.on('connection', (socket)=>{
         }
         console.log("drawn to canvas")
         base64ImageData = canvas?.toDataURL("image/png");
+
+        var canvasImage = new CanvasImage({
+            _id:"frequentSave",
+            image: base64ImageData
+        })
+        canvasImage.save();
     })
 })
 
@@ -64,3 +73,4 @@ const start = async() => {
 };
 
 start();
+});
