@@ -31,6 +31,7 @@ io.on('connection', async(socket)=>{
         console.log('a user connected');
         socket.on("canvas-data", ()=>{
             CanvasImage.find({id:"frequentSave"}).then((docs)=>{
+                console.log(docs)
                 base64ImageData = docs[0].image;
                 socket.emit("canvas-data", base64ImageData );
                 console.log("canvas-data-emitted");
