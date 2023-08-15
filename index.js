@@ -25,7 +25,19 @@ var canvas = createCanvas(750, 750);
 var ctx = canvas.getContext("2d");
 var base64ImageData = "";
 
-CanvasImage.find({id:"frequentSave"}).then((docs) => {
+const start = async() => {
+    try {
+        await mongoose.connect(process.env.MONGOOSE_URI);
+
+        httpServer.listen(5000, ()=> console.log('started on 5000'))
+    }
+    catch(e){
+        console.log(e.message);
+    }
+};
+
+start().then(
+    CanvasImage.find({id:"frequentSave"}).then((docs) => {
     base64ImageData = docs[0].image;
 
     io.on('connection', (socket)=>{
@@ -60,17 +72,6 @@ CanvasImage.find({id:"frequentSave"}).then((docs) => {
         canvasImage.save();
     })
 })
-
-const start = async() => {
-    try {
-        await mongoose.connect(process.env.MONGOOSE_URI);
-
-        httpServer.listen(5000, ()=> console.log('started on 5000'))
-    }
-    catch(e){
-        console.log(e.message);
-    }
-};
-
-start();
 });
+
+)
