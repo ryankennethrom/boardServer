@@ -25,7 +25,7 @@ var canvas = createCanvas(750, 750);
 var ctx = canvas.getContext("2d");
 var base64ImageData = "";
 
-CanvasImage.find({id:"frequentSave"}, (docs) => {
+CanvasImage.find({id:"frequentSave"}).then((docs) => {
     base64ImageData = docs[0].image;
 
     io.on('connection', (socket)=>{
