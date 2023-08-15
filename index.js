@@ -36,10 +36,10 @@ io.on('connection', (socket)=>{
         console.log("pen-action")
 
         //draw to canvas
-        ctx.lineWidth = draw_options.lineWidth;
-        ctx.lineJoin = draw_options.lineJoin;
-        ctx.lineCap = draw_options.lineCap;
-        ctx.strokeStyle = draw_options.strokeStyle;
+        ctx.lineWidth = line_details.lineWidth;
+        ctx.lineJoin = line_details.lineJoin;
+        ctx.lineCap = line_details.lineCap;
+        ctx.strokeStyle = line_details.strokeStyle;
         ctx.beginPath();
         ctx.moveTo(line_details.startX, line_details.startY);
         ctx.lineTo(line_details.currX, line_details.currY);
