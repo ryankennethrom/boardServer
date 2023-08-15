@@ -23,14 +23,15 @@ var CanvasImage = mongoose.model('canvasimages', canvasImageSchema);
 
 var canvas = createCanvas(750, 750);
 var ctx = canvas.getContext("2d");
+var base64ImageData = "";
 
 io.on('connection', (socket)=>{
     console.log('a user connected');
 
     socket.on("canvas-data", ()=>{
-        var base64ImageData = canvas?.toDataURL("image/png");
         socket.emit("canvas-data", base64ImageData );
         console.log("canvas-data-emitted");
+        console.log(base64ImageData)
     })
 
     socket.on("pen-action", (line_details_array) => {
@@ -47,6 +48,9 @@ io.on('connection', (socket)=>{
             ctx.closePath();
             ctx.stroke();
         }
+        console.log("drawn to canvas")
+        base64ImageData = canvas?.toDataURL("image/png");
+        console.log(base64ImageData)
     })
 })
 
