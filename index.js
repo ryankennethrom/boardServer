@@ -6,7 +6,7 @@ const app = express();
 // const path = require('path')
 // app.use(express.static(path.join(__dirname + '/.next')))
 mongoose.set('strictQuery', false);
-mongoose.connect(process.env.MONGOOSE_URI);
+
 const { createCanvas, loadImage } = require('canvas')
 
 const httpServer = require("http").createServer(app);
@@ -26,16 +26,21 @@ var canvas = createCanvas(750, 750);
 var ctx = canvas.getContext("2d");
 var base64ImageData = "";
 
-CanvasImage.find({id:"frequentSave"}).then((docs)=>{
-    base64ImageData = docs[0].image;
-})
 
 io.on('connection', (socket)=>{
         console.log('a user connected');
 
         socket.on("canvas-data", ()=>{
-            socket.emit("canvas-data", base64ImageData );
-            console.log("canvas-data-emitted");
+            if (base64ImageData === ""){
+                CanvasImage.find({id:"frequentSave"}).then((docs)=>{
+                    base64ImageData = docs[0].image;
+                    socket.emit("canvas-data", base64ImageData );
+                    console.log("canvas-data-emitted");
+                })
+            } else {
+                socket.emit("canvas-data", base64ImageData );
+                console.log("canvas-data-emitted");
+            }
         })
 
         socket.on("pen-action", (line_details_array) => {
@@ -65,6 +70,7 @@ io.on('connection', (socket)=>{
 
 const start = async() => {
     try {
+        await mongoose.connect(process.env.MONGOOSE_URI);
 
         httpServer.listen(5000, ()=> console.log('started on 5000'))
     }
