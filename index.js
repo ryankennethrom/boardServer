@@ -6,6 +6,7 @@ const app = express();
 // const path = require('path')
 // app.use(express.static(path.join(__dirname + '/.next')))
 mongoose.set('strictQuery', false);
+mongoose.connect(process.env.MONGOOSE_URI);
 const { createCanvas, loadImage } = require('canvas')
 
 const httpServer = require("http").createServer(app);
@@ -60,7 +61,6 @@ io.on('connection', (socket)=>{
 
 const start = async() => {
     try {
-        await mongoose.connect(process.env.MONGOOSE_URI);
         var doc = await CanvasImage.find({id:"frequentSave"});
         base64ImageData = doc[0].image;
 
