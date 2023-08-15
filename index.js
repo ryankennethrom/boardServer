@@ -50,6 +50,7 @@ io.on('connection', (socket)=>{
         }
         console.log("drawn to canvas")
         base64ImageData = canvas?.toDataURL("image/png");
+        socket.broadcast.emit("canvas-data", base64ImageData);
         console.log(base64ImageData)
     })
 })
