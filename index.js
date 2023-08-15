@@ -39,12 +39,10 @@ io.on('connection', async(socket)=>{
                 var base64ImageData = docs[0].image;
                 var canvas = createCanvas(750, 750);
                 var ctx = canvas.getContext("2d");
-                var image = new Image();
-                image.onload = function(){
-                    ctx?.drawImage(image, 0, 0);
-                };
-                image.src = data;
-                 for (let i = 0; i < line_details_array.length; i++) {
+
+                loadImage(base64ImageData).then((image)=>{
+                    ctx?.drawImage(image, 0, 0)
+                    for (let i = 0; i < line_details_array.length; i++) {
                     var line_details = line_details_array[i];
                     ctx.lineWidth = line_details.lineWidth;
                     ctx.lineJoin = line_details.lineJoin;
@@ -55,14 +53,15 @@ io.on('connection', async(socket)=>{
                     ctx.lineTo(line_details.currX, line_details.currY);
                     ctx.closePath();
                     ctx.stroke();
-                }
-                console.log("drawn to canvas")
-                base64ImageData = canvas?.toDataURL("image/png");
+                    }
+                    console.log("drawn to canvas")
+                    base64ImageData = canvas?.toDataURL("image/png");
 
-                var filter = { _id: "frequentSave" };
-                var update = { image: base64ImageData };
-                CanvasImage.findOneAndUpdate(filter, update).then(()=>{
-                    console.log("updated database")
+                    var filter = { _id: "frequentSave" };
+                    var update = { image: base64ImageData };
+                    CanvasImage.findOneAndUpdate(filter, update).then(()=>{
+                        console.log("updated database")
+                    })
                 })
             })
         })
