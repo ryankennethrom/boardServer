@@ -62,7 +62,7 @@ io.on('connection', async(socket)=>{
 const start = async() => {
     try {
         await mongoose.connect(process.env.MONGOOSE_URI);
-        var base64ImageData = await CanvasImage.find({_id:"frequentSave"})
+        var docs = await CanvasImage.find({_id:"frequentSave"})
         base64ImageData = docs[0].image;
 
         httpServer.listen(5000, ()=> console.log('started on 5000'))
