@@ -62,10 +62,6 @@ const start = async() => {
     try {
         await mongoose.connect(process.env.MONGOOSE_URI);
 
-        CanvasImage.find({id:"frequentSave"}).then((docs) => {
-            base64ImageData = docs[0].image;
-        })
-
         httpServer.listen(5000, ()=> console.log('started on 5000'))
     }
     catch(e){
@@ -73,4 +69,8 @@ const start = async() => {
     }
 };
 
-start();
+start().then(
+    CanvasImage.find({id:"frequentSave"}).then((docs) => {
+            base64ImageData = docs[0].image;
+    })
+)
