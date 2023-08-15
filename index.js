@@ -31,7 +31,6 @@ io.on('connection', (socket)=>{
     socket.on("canvas-data", ()=>{
         socket.emit("canvas-data", base64ImageData );
         console.log("canvas-data-emitted");
-        console.log(base64ImageData)
     })
 
     socket.on("pen-action", (line_details_array) => {
@@ -50,8 +49,6 @@ io.on('connection', (socket)=>{
         }
         console.log("drawn to canvas")
         base64ImageData = canvas?.toDataURL("image/png");
-        socket.broadcast.emit("canvas-data", base64ImageData);
-        console.log(base64ImageData)
     })
 })
 
