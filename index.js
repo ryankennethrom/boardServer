@@ -41,37 +41,37 @@ start().then(
     base64ImageData = docs[0].image;
 
     io.on('connection', (socket)=>{
-    console.log('a user connected');
+        console.log('a user connected');
 
-    socket.on("canvas-data", ()=>{
-        socket.emit("canvas-data", base64ImageData );
-        console.log("canvas-data-emitted");
-    })
-
-    socket.on("pen-action", (line_details_array) => {
-        console.log("pen-action")
-        for (let i = 0; i < line_details_array.length; i++) {
-            var line_details = line_details_array[i];
-            ctx.lineWidth = line_details.lineWidth;
-            ctx.lineJoin = line_details.lineJoin;
-            ctx.lineCap = line_details.lineCap;
-            ctx.strokeStyle = line_details.strokeStyle;
-            ctx.beginPath();
-            ctx.moveTo(line_details.startX, line_details.startY);
-            ctx.lineTo(line_details.currX, line_details.currY);
-            ctx.closePath();
-            ctx.stroke();
-        }
-        console.log("drawn to canvas")
-        base64ImageData = canvas?.toDataURL("image/png");
-
-        var canvasImage = new CanvasImage({
-            _id:"frequentSave",
-            image: base64ImageData
+        socket.on("canvas-data", ()=>{
+            socket.emit("canvas-data", base64ImageData );
+            console.log("canvas-data-emitted");
         })
-        canvasImage.save();
+
+        socket.on("pen-action", (line_details_array) => {
+            console.log("pen-action")
+            for (let i = 0; i < line_details_array.length; i++) {
+                var line_details = line_details_array[i];
+                ctx.lineWidth = line_details.lineWidth;
+                ctx.lineJoin = line_details.lineJoin;
+                ctx.lineCap = line_details.lineCap;
+                ctx.strokeStyle = line_details.strokeStyle;
+                ctx.beginPath();
+                ctx.moveTo(line_details.startX, line_details.startY);
+                ctx.lineTo(line_details.currX, line_details.currY);
+                ctx.closePath();
+                ctx.stroke();
+            }
+            console.log("drawn to canvas")
+            base64ImageData = canvas?.toDataURL("image/png");
+
+            var canvasImage = new CanvasImage({
+                _id:"frequentSave",
+                image: base64ImageData
+            })
+            canvasImage.save();
+        })
     })
-})
-});
+    })
 
 )
